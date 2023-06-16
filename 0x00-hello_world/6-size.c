@@ -1,14 +1,16 @@
 #include <stdio.h>
 /**
-* main - A C program that prints the size of various types on the computer it is compiled and run on using printf function
-* return: 0
+* main - A program that prints various size of computer using printf function
+* Return: 0
 */
 int main(void)
 {
-printf("Size of char: %zu byte\n", sizeof(char));
-printf("Size of int: %zu bytes\n", sizeof(int));
-printf("Size of long int: %zu bytes\n", sizeof(long int));
-printf("Size of long long int: %zu bytes\n", sizeof(long long int));
-printf("Size of float: %zu bytes\n", sizeof(float));
+
+printf("Size of a char: %zu bytes(s)\n", sizeof(char));
+printf("Size of a int: %zu bytes(s)\n", sizeof(int));
+printf("Size of a long int: %zu bytes(s)\n", sizeof(long int));
+printf("Size of a long long int: %zu bytes(s)\n", sizeof(long long int));
+printf("Size of a float: %zu bytes(s)\n", sizeof(float));
+
 return (0);
 }
