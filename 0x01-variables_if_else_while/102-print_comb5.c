@@ -23,7 +23,7 @@ putchar(k);
 putchar(j);
 if (c + i + k + j == 227 && c == 57)
 {
-break:
+break;
 }
 else
 {
