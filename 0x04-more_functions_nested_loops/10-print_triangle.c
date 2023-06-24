@@ -1,7 +1,8 @@
 #include "main.h"
 
 /**
- * print_triangle - a function that prints a triangle followed by a new line.
+ * print_triangle - entry point
+ * Description: i prints diagonals
  * @size: size of the triangle
  * Return: void
  */
