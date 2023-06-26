@@ -6,6 +6,7 @@
  * @a: This is the input array
  * @n: This is the length of the array
  * Return: void
+ *
  */
 
 void print_array(int *a, int n)
