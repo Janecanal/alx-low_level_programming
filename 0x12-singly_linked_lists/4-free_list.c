@@ -3,20 +3,19 @@
 
 /**
  * free_list - this function frees a list_t list.
- * @head: the list_t that will be freed
- *
+ * @head: list_t to be freed
  * Return: nothing
- **/
+ */
+
 
 void free_list(list_t *head)
 {
-	list_t *tmp;
+	list_t *current;
 
-	while (head)
+	while ((current = head) != NULL)
 	{
-		tmp = head->next;
-		free(head->str);
-		free(head);
-		head = tmp;
+		head = head->next;
+		free(current->str);
+		free(current);
 	}
 }
