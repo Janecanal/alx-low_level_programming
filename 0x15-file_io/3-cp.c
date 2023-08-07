@@ -1,74 +1,68 @@
-include "main.h"
-
-
-/**
- * error_file - the function checks if files can be opened.
- * @file_from: file_from.
- * @file_to: file_to.
- * @argv: arguments vector.
- * Return: void.
- **/
-
-void error_file(int file_from, int file_to, char *argv[])
-{
-	if (file_from == -1)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", argv[1]);
-		exit(98);
-	}
-	if (file_to == -1)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]);
-		exit(99);
-	}
-}
+#include <stdio.h>
+#include "main.h"
 
 /**
- * main - entry point
- * @argc: number of arguments count.
- * @argv: arguments vector.
- * Return: Always 0 (Sucess)
- */
-
-int main(int argc, char *argv[])
+  * main - Entry point
+  * @argc: The argument count
+  * @argv: The argument vector
+  * Return: ...
+  */
+int main(int argc, char **argv)
 {
-	int file_from, file_to, err_close;
-	ssize_t nchars, nwr;
-	char buf[1024];
-
 	if (argc != 3)
 	{
-		dprintf(STDERR_FILENO, "%s\n", "Usage: cp file_from file_to");
+		dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n");
 		exit(97);
 	}
 
-	file_from = open(argv[1], O_RDONLY);
-	file_to = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC | O_APPEND, 0664);
-	error_file(file_from, file_to, argv);
+	copy_file(argv[1], argv[2]);
+	exit(0);
+}
 
-	nchars = 1024;
-	while (nchars == 1024)
+/**
+  * copy_file - this function copies file
+  * @src: the source to be copied
+  * @dest: the destination to be copied to
+  * Return: different values dependind on conditions
+  **/
+
+void copy_file(const char *src, const char *dest)
+{
+	int ofiledata, tfiledata, readed;
+	char buff[1024];
+
+	ofiledata = open(src, O_RDONLY);
+	if (!src || ofiledata == -1)
 	{
-		nchars = read(file_from, buf, 1024);
-		if (nchars == -1)
-			error_file(-1, 0, argv);
-		nwr = write(file_to, buf, nchars);
-		if (nwr == -1)
-			error_file(0, -1, argv);
+		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", src);
+		exit(98);
 	}
 
-	err_close = close(file_from);
-	if (err_close == -1)
+	tfiledata = open(dest, O_CREAT | O_WRONLY | O_TRUNC, 0664);
+	while ((readed = read(ofiledata, buff, 1024)) > 0)
 	{
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", file_from);
+		if (write(tfiledata, buff, readed) != readed || tfiledata == -1)
+		{
+			dprintf(STDERR_FILENO, "Error: Can't write to %s\n", dest);
+			exit(99);
+		}
+	}
+
+	if (readed == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", src);
+		exit(98);
+	}
+
+	if (close(ofiledata) == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't close filedata %d\n", ofiledata);
 		exit(100);
 	}
 
-	err_close = close(file_to);
-	if (err_close == -1)
+	if (close(tfiledata) == -1)
 	{
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", file_from);
+		dprintf(STDERR_FILENO, "Error: Can't close filedata %d\n", tfiledata);
 		exit(100);
 	}
-	return (0);
 }
